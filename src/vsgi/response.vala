@@ -35,7 +35,7 @@ namespace VSGI {
 		 *
 		 * @since 0.0.1
 		 */
-		public abstract MessageHeaders headers { get; }
+		public MessageHeaders headers { construct; get; default = new MessageHeaders (MessageHeadersType.RESPONSE); }
 
 		/**
 		 * Response cookies.

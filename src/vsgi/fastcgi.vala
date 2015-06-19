@@ -188,7 +188,6 @@ namespace VSGI.FastCGI {
 
 		private URI _uri = new URI (null);
 		private HashTable<string, string>? _query = null;
-		private MessageHeaders _headers = new MessageHeaders (MessageHeadersType.REQUEST);
 
 		public override HTTPVersion http_version {
 			get {
@@ -210,10 +209,6 @@ namespace VSGI.FastCGI {
 			get {
 				return this._query;
 			}
-		}
-
-		public override MessageHeaders headers {
-			get { return this._headers; }
 		}
 
 		public Request (HashTable<string, string> environment , IOStream connection) {
@@ -263,18 +258,14 @@ namespace VSGI.FastCGI {
 
 		private uint _status;
 
-		private MessageHeaders _headers = new MessageHeaders (MessageHeadersType.RESPONSE);
-
 		public override uint status {
 			get { return this._status; }
 			set {
 				this._status = value;
 				// update the 'Status' header
-				this._headers.replace ("Status", "%u %s".printf (value, Status.get_phrase (value)));
+				this.headers.replace ("Status", "%u %s".printf (value, Status.get_phrase (value)));
 			}
 		}
-
-		public override MessageHeaders headers { get { return this._headers; } }
 
 		/**
 		 * {@inheritDoc}

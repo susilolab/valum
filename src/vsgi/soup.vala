@@ -29,12 +29,6 @@ namespace VSGI.Soup {
 
 		public override HashTable<string, string>? query { get { return this._query; } }
 
-		public override MessageHeaders headers {
-			get {
-				return this.message.request_headers;
-			}
-		}
-
 		/**
 		 * {@inheritDoc}
 		 *
@@ -47,7 +41,7 @@ namespace VSGI.Soup {
 		 * @param query      parsed HTTP query provided by {@link Soup.ServerCallback}
 		 */
 		public Request (Message msg, IOStream connection, HashTable<string, string>? query) {
-			Object (message: msg, connection: connection);
+			Object (message: msg, headers: msg.request_headers, connection: connection);
 			this._query = query;
 		}
 	}
@@ -69,10 +63,6 @@ namespace VSGI.Soup {
 			set { this.message.set_status (value); }
 		}
 
-		public override MessageHeaders headers {
-			get { return this.message.response_headers; }
-		}
-
 		/**
 		 * {@inheritDoc}
 		 *
@@ -81,7 +71,7 @@ namespace VSGI.Soup {
 		 * @param msg message underlying this response
 		 */
 		public Response (Request req, Message msg, IOStream connection) {
-			Object (request: req, message: msg, connection: connection);
+			Object (request: req, message: msg, headers: msg.response_headers, connection: connection);
 		}
 
 #if SOUP_2_50
