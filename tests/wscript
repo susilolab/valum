@@ -36,6 +36,12 @@ def build(bld):
         install_path = None)
     bld.program(
         features     = 'test',
+        target       = 'multipart-test',
+        source       = 'multipart-test.vala data/multipart-test.gresource.xml',
+        use          = 'vsgi',
+        install_path = None)
+    bld.program(
+        features     = 'test',
         target       = 'request-test',
         source       = 'request-test.vala',
         use          = 'vsgi-mock',
