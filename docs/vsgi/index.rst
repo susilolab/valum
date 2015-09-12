@@ -54,6 +54,66 @@ which will in turn teardown the connection appropriately.
         throw new IOError.FAILED ("some I/O failed");
     });
 
+Loadable application
+--------------------
+
+An application can be written as a `GLib.Module`_ served from any
+implementation with ``vsgi``.
+
+.. _GLib.Module: http://valadoc.org/#!api=gmodule-2.0/GLib.Module
+
+.. code:: vala
+
+    public void app (Request req, Response res) {
+        res.status = 200;
+        res.body.write_all ("Hello world!".dat, null);
+    }
+
+.. code-block:: bash
+
+    vsgi [--directory=<directory>] [--server=<server>] <module_name>:<symbol> -- <arguments>
+
+-  the directory where the shared library is located or default system path
+-  server implementation which is either `soup`, `fastcgi` or `scgi`
+-  the name of the library without the ``lib`` prefix and ``.so`` extension
+-  an entry point symbol following the ``ApplicationCallback`` delegate as
+   defined in the preceding section
+-  arguments for the server implementation specified by the ``--server`` flag
+
+.. note::
+
+    Arguments for ``vsgi`` and those for the server implementation must be
+    delemited by a ``--``. The module:symbol will become the
+
+.. code-block:: bash
+
+    vsgi --directory=build/examples/loader app:app -- --port=3005
+
+If you need static initialization, GLib.Module will automatically call the
+`g_module_check_init` and `g_module_unload` symbols defined in the shared
+library. Implemented correctly, it will be used to perform live reloading in
+a future release.
+
+.. code:: vala
+
+    using Gda;
+
+    public Connection database;
+
+    [CCode (cname = "g_module_check_init")]
+    public void check_init () {
+        database = Connection.from_dsn ("localhost", null, ConnectionOptions.);
+    }
+
+    [CCode (cname = "g_module_unload")]
+    public void unload () {
+        database.close ();
+    }
+
+    public void app (Request req, Response res) {
+        // ...
+    }
+
 Asynchronous processing
 ~~~~~~~~~~~~~~~~~~~~~~~
 
