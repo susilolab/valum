@@ -51,7 +51,7 @@ namespace VSGI.Loader {
 	/**
 	 * @since 0.3
 	 */
-	public string application_id;
+	public string? application_id;
 
 	/**
 	 * @since 0.3
@@ -59,7 +59,7 @@ namespace VSGI.Loader {
 	const OptionEntry[] options = {
 		{"directory",      'd', 0, OptionArg.FILENAME, ref directory,      "the directory where MODULE is located"},
 		{"server",         'i', 0, OptionArg.STRING,   ref server,         "technology used to serve the application", "http"},
-		{"application-id", 'a', 0, OptionArg.STRING,   ref application_id, "application identifier",                   "org.vsgi.Loader"},
+		{"application-id", 'a', 0, OptionArg.STRING,   ref application_id, "application identifier"},
 		{null}
 	};
 
@@ -67,7 +67,7 @@ namespace VSGI.Loader {
 		// default options
 		directory      = null;
 		server         = "http";
-		application_id = "org.vsgi.Loader";
+		application_id = null;
 
 		try {
 			var parser = new OptionContext ("MODULE:SYMBOL [-- SERVER_OPTION...]");
