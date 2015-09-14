@@ -21,7 +21,7 @@ using VSGI;
 public Router? _app = null;
 
 [CCode (cname = "g_module_check_init")]
-public void init () {
+public void check_init () {
 	_app = new Router ();
 
 	_app.get ("/", (req, res) => {

@@ -106,18 +106,16 @@ namespace VSGI.Loader {
 
 		var module_path = Module.build_path (directory, module_and_symbol[0]);
 
-		stdout.printf ("loading symbol '%s' from '%s'\n", module_and_symbol[1], module_path);
-
 		var module = Module.open (module_path, ModuleFlags.BIND_LAZY);
 
 		if (module == null) {
-			stderr.printf ("could not load '%s'\n", module_path);
+			stderr.printf ("%s\n", Module.error ());
 			return 1;
 		}
 
 		void* app_symbol;
 		if (!module.symbol (module_and_symbol[1], out app_symbol)) {
-			stderr.printf ("could not extract symbol '%s' from '%s'\n", module_and_symbol[1], module_path);
+			stderr.printf ("%s\n", Module.error ());
 			return 1;
 		}
 
