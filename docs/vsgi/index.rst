@@ -57,8 +57,13 @@ which will in turn teardown the connection appropriately.
 Loadable application
 --------------------
 
-An application can be written as a `GLib.Module`_ served from any
-implementation with ``vsgi``.
+.. versionadded:: 0.3
+
+An application can be written as a `GLib.Module`_ and served from any supported
+implementations with the ``vsgi`` program, no recompilation needed.
+
+The only requirement is to define a symbol that constitute an entry point. In
+this example, we define the ``app`` symbol:
 
 .. _GLib.Module: http://valadoc.org/#!api=gmodule-2.0/GLib.Module
 
@@ -66,37 +71,81 @@ implementation with ``vsgi``.
 
     public void app (Request req, Response res) {
         res.status = 200;
-        res.body.write_all ("Hello world!".dat, null);
+        res.body.write_all ("Hello world!".data, null);
     }
+
+.. warning::
+
+    If namespaces are used, the function will be prefixed by the namespace in
+    lowercase and an underscore character, so the actual symbol will be
+    ``<namespace>_app``.
+
+
+The ``cname`` attribute can be used to generate a particular symbol:
+
+.. code:: vala
+
+    namespace VSGI {
+        // produce 'app' instead of 'vsgi_app' in the generated C code
+        [CCode (cname = "app")]
+        public void  app (Request req, Response res) {}
+    }
+
+Usage
+~~~~~
+
+The ``vsgi`` program can be used as follow:
 
 .. code-block:: bash
 
-    vsgi [--directory=<directory>] [--server=<server>] <module_name>:<symbol> -- <arguments>
+    vsgi [--directory=<directory>] [--server=<server>]
+         [--application-id=<application_id>] <module_name>:<symbol> -- <arguments>
 
 -  the directory where the shared library is located or default system path
--  server implementation which is either `soup`, `fastcgi` or `scgi`
+-  server implementation which is either ``soup``, ``fastcgi`` or ``scgi`` and
+   defaults to ``soup``
+-  an application identifier to use to initialize the :doc:`server/index.rst`
 -  the name of the library without the ``lib`` prefix and ``.so`` extension
 -  an entry point symbol following the ``ApplicationCallback`` delegate as
    defined in the preceding section
 -  arguments for the server implementation specified by the ``--server`` flag
+   and delimited by ``--``
 
-.. note::
+.. warning::
 
-    Arguments for ``vsgi`` and those for the server implementation must be
-    delemited by a ``--``. The module:symbol will become the
+    Arguments for the server implementation must be separated by a ``--``
+    indicator, otherwise they will be interpreted by ``vsgi``.
 
 .. code-block:: bash
 
     vsgi --directory=build/examples/loader app:app -- --port=3005
 
-If you need static initialization, GLib.Module will automatically call the
-`g_module_check_init` and `g_module_unload` symbols defined in the shared
-library. Implemented correctly, it will be used to perform live reloading in
-a future release.
+Additional arguments are described in ``vsgi --help``.
+
+.. code-block:: bash
+
+    vsgi --help
+
+For details about specific options, the ``--help`` flag can be forwarded to the
+server implementation:
+
+.. code-block:: bash
+
+    vsgi --server=fastcgi app:app -- --help
+
+Initialization
+~~~~~~~~~~~~~~
+
+If you need static initialization, `GLib.Module`_ will automatically call the
+``g_module_check_init`` and ``g_module_unload`` symbols defined in the shared
+library.
+
+.. _GLib.Module: http://valadoc.org/#!api=gmodule-2.0/GLib.Module
 
 .. code:: vala
 
     using Gda;
+    using VSGI;
 
     public Connection database;
 
