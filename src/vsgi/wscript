@@ -38,7 +38,7 @@ def build(bld):
     bld.shlib(
         packages     = ['glib-2.0', 'gio-2.0', 'libsoup-2.4'],
         target       = 'vsgi',
-        gir          = 'VSGI-{}'.format(Context.g_module.API_VERSION),
+        gir          = 'Vsgi-{}'.format(Context.g_module.API_VERSION),
         source       = bld.path.ant_glob('*.vala'),
         use          = ['GLIB', 'GIO', 'SOUP'],
         header_path  = '${INCLUDEDIR}/vsgi',

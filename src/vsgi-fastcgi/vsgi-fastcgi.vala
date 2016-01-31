@@ -30,7 +30,7 @@ public Type plugin_init (TypeModule type_module) {
  *
  * @since 0.1
  */
-[CCode (gir_namespace = "VSGI.FastCGI", gir_version = "0.2")]
+[CCode (gir_namespace = "VsgiFastCgi", gir_version = "0.2")]
 namespace VSGI.FastCGI {
 
 	/**

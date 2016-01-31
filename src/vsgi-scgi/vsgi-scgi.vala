@@ -36,7 +36,7 @@ public Type plugin_init (TypeModule type_module) {
  *
  * @since 0.2
  */
-[CCode (gir_namespace = "VSGI.SCGI", gir_version = "0.2")]
+[CCode (gir_namespace = "VsgiScgi", gir_version = "0.2")]
 namespace VSGI.SCGI {
 
 	/**

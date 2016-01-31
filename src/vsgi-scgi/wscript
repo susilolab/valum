@@ -7,7 +7,7 @@ def build(bld):
     from waflib import Context
     bld.shlib(
         target       = 'vsgi-scgi',
-        gir          = 'VSGI.SCGI-{}'.format(Context.g_module.API_VERSION),
+        gir          = 'VsgiScgi-{}'.format(Context.g_module.API_VERSION),
         source       = 'vsgi-scgi.vala',
         use          = 'vsgi vsgi-cgi',
         vala_define  = 'INCLUDE_TYPE_MODULE',

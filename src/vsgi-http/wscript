@@ -7,7 +7,7 @@ def build(bld):
     from waflib import Context
     bld.shlib(
         target       = 'vsgi-http',
-        gir          = 'VSGI.HTTP-{}'.format(Context.g_module.API_VERSION),
+        gir          = 'VsgiHttp-{}'.format(Context.g_module.API_VERSION),
         source       = 'vsgi-http.vala',
         use          = 'vsgi',
         vala_define  = 'INCLUDE_TYPE_MODULE',

@@ -26,7 +26,7 @@ using Soup;
  *
  * @since 0.2
  */
-[CCode (gir_namespace = "VSGI.CGI", gir_version = "0.2")]
+[CCode (gir_namespace = "VsgiCgi", gir_version = "0.2")]
 namespace VSGI.CGI {
 
 	public class Request : VSGI.Request {

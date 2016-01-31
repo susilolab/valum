@@ -7,7 +7,7 @@ def build(bld):
     from waflib import Context
     bld.shlib(
         target       = 'vsgi-mock',
-        gir          = 'VSGI.Mock-{}'.format(Context.g_module.API_VERSION),
+        gir          = 'VsgiMock-{}'.format(Context.g_module.API_VERSION),
         source       = 'vsgi-mock.vala',
         use          = 'vsgi',
         header_path  = '${INCLUDEDIR}/vsgi',

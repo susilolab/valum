@@ -30,7 +30,7 @@ public Type plugin_init (TypeModule type_module) {
  *
  * @since 0.1
  */
-[CCode (gir_namespace = "VSGI.HTTP", gir_version = "0.2")]
+[CCode (gir_namespace = "VsgiHttp", gir_version = "0.2")]
 namespace VSGI.HTTP {
 
 #if !SOUP_2_50

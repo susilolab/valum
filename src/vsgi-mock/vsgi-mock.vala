@@ -21,6 +21,7 @@ using Soup;
 /**
  * Mock implementation of VSGI used for testing purposes.
  */
+[CCode (gir_namespace = "VsgiMock", gir_version = "0.2")]
 namespace VSGI.Mock {
 
 	/**

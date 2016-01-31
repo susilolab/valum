@@ -17,6 +17,7 @@
 
 using Soup;
 
+[CCode (gir_namespace = "VsgiCookies", gir_version = "0.2")]
 namespace VSGI.Cookies {
 
 	/**

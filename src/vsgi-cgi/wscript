@@ -8,7 +8,7 @@ def build(bld):
     bld.shlib(
         packages     = 'gio-unix-2.0',
         target       = 'vsgi-cgi',
-        gir          = 'VSGI.CGI-{}'.format(Context.g_module.API_VERSION),
+        gir          = 'VsgiCgi-{}'.format(Context.g_module.API_VERSION),
         source       = 'vsgi-cgi.vala',
         use          = 'vsgi GIOUNIX',
         header_path  = '${INCLUDEDIR}/vsgi',
