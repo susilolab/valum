@@ -17,6 +17,7 @@ def configure(conf):
 
     conf.check(lib='gcov', mandatory=False, uselib_store='GCOV', args='--cflags --libs')
     conf.find_program('valadoc', mandatory=False)
+    conf.find_program('g-ir-compiler')
 
     conf.recurse(['src', 'docs', 'tests'])
 

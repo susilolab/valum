@@ -15,6 +15,12 @@ def build(bld):
         install_path = '${LIBDIR}')
 
     bld(
+        rule         = '${G_IR_COMPILER} --output=${TGT} ${SRC}',
+        target       = 'VsgiCgi-{}.typelib'.format(Context.g_module.API_VERSION),
+        source       = '../vsgi/Vsgi-{0}.gir VsgiCgi-{0}.gir'.format(Context.g_module.API_VERSION),
+        install_path = '${LIBDIR}/girepository-1.0')
+
+    bld(
         features     = 'subst',
         target       = 'vsgi-cgi.pc',
         source       = 'vsgi-cgi.pc.in',

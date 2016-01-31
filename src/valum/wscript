@@ -13,3 +13,10 @@ def build(bld):
         header_path  = '${INCLUDEDIR}/valum',
         install_path = '${LIBDIR}')
 
+    bld(
+        rule         = '${G_IR_COMPILER} --output=${TGT} ${SRC}',
+        target       = 'Valum-{}.typelib'.format(Context.g_module.API_VERSION),
+        source       = '../vsgi/Vsgi-{0}.gir Valum-{0}.gir'.format(Context.g_module.API_VERSION),
+        use          = 'vsgi',
+        install_path = '${LIBDIR}/girepository-1.0')
+

@@ -44,3 +44,8 @@ def build(bld):
         header_path  = '${INCLUDEDIR}/vsgi',
         install_path = '${LIBDIR}')
 
+    bld(
+        rule         = '${G_IR_COMPILER} --output=${TGT} ${SRC}',
+        target       = 'Vsgi-{}.typelib'.format(Context.g_module.API_VERSION),
+        source       = 'Vsgi-{}.gir'.format(Context.g_module.API_VERSION),
+        install_path = '${LIBDIR}/girepository-1.0')
