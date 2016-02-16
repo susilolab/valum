@@ -37,21 +37,38 @@ public class Valum.Context : Object {
 	public Context? parent { construct; get; default = null; }
 
 	/**
-	 * Create a new root context.
+	 * Priority for asynchronous operations.
 	 *
 	 * @since 0.3
 	 */
-	public Context () {
+	public int priority { construct; get; default = GLib.Priority.DEFAULT; }
 
+	/**
+	 * @since 0.3
+	 */
+	public Cancellable? cancellable { construct; get; default = null; }
+
+	/**
+	 * Create a new root context.
+	 *
+	 * @since 0.3
+	 *
+	 * @param priority    priority for operations running under this context
+	 * @param cancellable cancellable for operations
+	 */
+	public Context (int priority = GLib.Priority.DEFAULT, Cancellable? cancellable = null) {
+		Object (priority: priority, cancellable: cancellable);
 	}
 
 	/**
 	 * Create a new child context.
 	 *
+	 * It will inherit its parent priority and cancellable.
+	 *
 	 * @since 0.3
 	 */
 	public Context.with_parent (Context parent) {
-		Object (parent: parent);
+		Object (parent: parent, priority: parent.priority, cancellable: parent.cancellable);
 	}
 
 	/**

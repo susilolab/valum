@@ -118,7 +118,7 @@ namespace Valum.ServerSentEvents {
 					// final newline that concludes the message
 					message.append_c ('\n');
 
-					res.body.write_all (message.str.data, null);
+					res.body.write_all (message.str.data, null, _context.cancellable);
 					res.body.flush ();
 				}, _context);
 			} catch (Error err) {

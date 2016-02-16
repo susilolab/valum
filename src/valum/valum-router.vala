@@ -51,6 +51,13 @@ namespace Valum {
 		 */
 		private Queue<string> scopes = new Queue<string> ();
 
+		/**
+		 * Global routing context.
+		 *
+		 * @since 0.3
+		 */
+		public Context context { construct; get; default = new Context (); }
+
 		construct {
 			// initialize default types
 			register_type ("int",    /\d+/);
@@ -361,10 +368,10 @@ namespace Valum {
 				 * which it has been registered.
 				 */
 				if (this.status_handlers.contains (status_code)) {
-					var context = new Context ();
-					context["message"] = err.message;
+					var status_context = new Context.with_parent (context);
+					status_context["message"] = err.message;
 					try {
-						if (this.perform_routing (this.status_handlers[status_code].get_begin_iter (), req, res, context))
+						if (this.perform_routing (this.status_handlers[status_code].get_begin_iter (), req, res, status_context))
 							return; // handled!
 					} catch (Error err) {
 						// feed the error back in the invocation
@@ -466,10 +473,8 @@ namespace Valum {
 		public void handle (Request req, Response res) {
 			// initial invocation
 			this.invoke (req, res, () => {
-				var context = new Context ();
-
 				// ensure at least one route has been declared with that method
-				if (this.perform_routing (this.routes.get_begin_iter (), req, res, context))
+				if (this.perform_routing (this.routes.get_begin_iter (), req, res, new Context.with_parent (context)))
 					return; // something matched
 
 				// find routes from other methods matching this request

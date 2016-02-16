@@ -19,11 +19,11 @@ using Valum;
 using Valum.ServerSentEvents;
 using VSGI.HTTP;
 
-public async void respond_async (VSGI.Request req, VSGI.Response res) throws Error {
+public async void respond_async (VSGI.Request req, VSGI.Response res, int priority, Cancellable? cancellable) throws Error {
 	size_t bytes_written;
-	var body    = yield res.get_body_async (Priority.DEFAULT, null, out bytes_written);
-	yield body.write_all_async ("Hello world!".data, Priority.DEFAULT, null, out bytes_written);
-	yield body.close_async ();
+	var body    = yield res.get_body_async (priority, cancellable, out bytes_written);
+	yield body.write_all_async ("Hello world!".data, priority, cancellable, out bytes_written);
+	yield body.close_async (priority, cancellable);
 }
 
 
@@ -37,19 +37,19 @@ app.use ((req, res, next) => {
 	next (req, res);
 });
 
-app.get ("", (req, res, next) => {
+app.get ("", (req, res, next, ctx) => {
 	var template = new View.from_resources ("/templates/home.html");
 	template.to_stream (res.body);
 });
 
-app.get ("async", (req, res) => {
-	respond_async.begin (req, res);
+app.get ("async", (req, res, next, ctx) => {
+	respond_async.begin (req, res, ctx.priority, ctx.cancellable);
 });
 
 app.get ("gzip", (req, res, next) => {
 	res.headers.replace ("Content-Encoding", "gzip");
 	next (req, new VSGI.ConvertedResponse (res, new ZlibCompressor (ZlibCompressorFormat.GZIP)));
-}).then ((req, res) => {
+}).then ((req, res, next, ctx) => {
 	var template = new View.from_resources ("/templates/home.html");
 	template.to_stream (res.body);
 });
@@ -279,8 +279,8 @@ app.get ("static/<path:path>", (req, res, next, context) => {
 		// transfer the file
 		res.body.splice_async.begin (file,
 			                         OutputStreamSpliceFlags.CLOSE_SOURCE | OutputStreamSpliceFlags.CLOSE_TARGET,
-			                         Priority.DEFAULT,
-			                         null, (obj, result) => {
+			                         context.priority,
+			                         context.cancellable, (obj, result) => {
 			app.invoke (req, res, () => {
 				res.body.splice_async.end (result);
 			});
@@ -290,7 +290,7 @@ app.get ("static/<path:path>", (req, res, next, context) => {
 	}
 });
 
-app.get ("server-sent-events", stream_events ((req, send) => {
+app.get ("server-sent-events", stream_events ((req, send, ctx) => {
 	send (null, "now!");
 	GLib.Timeout.add_seconds (5, () => {
 		try {
@@ -299,7 +299,7 @@ app.get ("server-sent-events", stream_events ((req, send) => {
 			warning (err.message);
 		}
 		return false;
-	});
+	}, ctx.priority);
 }));
 
 app.get ("negociate", accept ("application/json", (req, res) => {
