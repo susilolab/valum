@@ -20,7 +20,7 @@ before_install:
 
 before_script:
     - mkdir build && cd build
-    - /usr/local/bin/meson.py --enable-gcov ..
+    - /usr/local/bin/meson.py --enable-gcov -D enable_docs=true -D enable_examples=true ..
     - ninja-build
 
 script:
