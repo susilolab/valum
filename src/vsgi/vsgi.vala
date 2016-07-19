@@ -48,5 +48,13 @@ namespace VSGI {
 	 * @since 0.3
 	 */
 	[CCode (has_target = false)]
-	public delegate Type ServerInitFunc (TypeModule module);
+	public delegate Type ServerInitFunc (TypeModule type_module);
+
+	/**
+	 * Type of callbacks which produce {@link VSGI.ApplicationCallback} on-demand.
+	 *
+	 * @since 0.3
+	 */
+	[CCode (has_target = false)]
+	public delegate ApplicationCallback ApplicationInitFunc ();
 }

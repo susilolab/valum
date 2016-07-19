@@ -113,13 +113,13 @@ namespace VSGI.Loader {
 			return 1;
 		}
 
-		void* app_symbol;
-		if (!module.symbol (module_and_symbol[1], out app_symbol)) {
+		void* app_init_symbol;
+		if (!module.symbol (module_and_symbol[1], out app_init_symbol)) {
 			stderr.printf ("%s\n", Module.error ());
 			return 1;
 		}
 
-		var app = (ApplicationCallback) (owned) app_symbol;
+		ApplicationInitFunc app_init = (ApplicationInitFunc) (owned) app_init_symbol;
 
 		// use the module:symbol as zeroth argument
 		string[] server_args = {args[1]};
@@ -128,6 +128,8 @@ namespace VSGI.Loader {
 		if (args.length > 2 && args[2] == "--")
 			foreach (var arg in args[3:args.length])
 				server_args += arg;
+
+		var app = app_init ();
 
 		return Server.new_with_application (server, application_id, (owned) app).run (server_args);
 	}

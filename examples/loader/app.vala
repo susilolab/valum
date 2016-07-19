@@ -18,25 +18,12 @@
 using Valum;
 using VSGI;
 
-public Router? _app = null;
+public ApplicationCallback app_init () {
+	var app = new Router ();
 
-[CCode (cname = "g_module_check_init")]
-public void check_init () {
-	_app = new Router ();
-
-	_app.get ("/", (req, res) => {
+	app.get ("/", (req, res) => {
 		return res.expand_utf8 ("Hello world!");
 	});
-}
 
-[CCode (cname = "g_module_unload")]
-public void unload () {
-	_app = null;
-}
-
-/**
- * Entry point
- */
-public bool app (Request req, Response res) throws Error {
-	return _app.handle (req, res);
+	return app.handle;
 }
